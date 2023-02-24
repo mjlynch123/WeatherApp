@@ -1,0 +1,14 @@
+body {
+    width: 100vw;
+}
+
+#icons {
+    display: flex;
+}
+
+#weatherBox {
+    border: 1px solid;
+    margin: 5px;
+    width: 125px;    
+    height: 150px;
+}
