@@ -1,17 +1,60 @@
 body {
     max-width: 100vw;
+    margin: 0;
+}
+
+header {
+    border: 1px solid;
+}
+
+#cityWeather {
+    text-align: center;
+}
+
+.mainSection {
     display: flex;
 }
 
 #search {
-    border: 1px solid;
     height: 100%;
-    max-width: 30%;
-    height: 100vh;
+    width: 30vw;
+    margin: 5px;
+}
+
+#cityName {
+    width: 50%;
+    height: 27px;
+    border: .5px solid grey;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.enter {
+    display: flex;
+}
+
+#submit {
+    width: 49%;
+    color: white;
+    border: none;
+    height: 31px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    background-color: #003399;
+}
+
+.btn {
+    height: 35px;
+    width: 100%;
+    color: white;
+    border: none;
+    margin-top: 5px;
+    border-radius: 5px;
+    background-color: #003399;
 }
 
 main {
-    align-items: right;
     width: 70%;
 }
 

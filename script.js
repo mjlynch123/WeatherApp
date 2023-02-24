@@ -1,12 +1,20 @@
 var icons = document.getElementById('icons');
 var currentWeather = document.getElementById('currentDay');
+var cityWeather = document.getElementById('cityWeather');
+var btn1 = document.getElementById("btn1");
+var btn2 = document.getElementById("btn2");
+var btn3 = document.getElementById("btn3");
+var btn4 = document.getElementById("btn4");
+var btn5 = document.getElementById("btn5");
 
 async function getCityWeather(cityName) {
+    document.querySelectorAll("#weatherBox").forEach(box => box.remove());
+
     var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=9a79cae9bb4ffc11b3eac88fea11149c`;
     var geocodingResponse = await fetch(apiEndpoint);
     var geocodingData = await geocodingResponse.json();
     var {lat, lon} = geocodingData[0];
-    console.log("Geocoding Data ",geocodingData);
+    //console.log("Geocoding Data ",geocodingData);
 
     // In this one we will make sure to specify that we want the the data to be in imperial units instead of kelvin
     var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=9a79cae9bb4ffc11b3eac88fea11149c`;
@@ -14,17 +22,19 @@ async function getCityWeather(cityName) {
     var weatherData = await weatherResponse.json();
     console.log("Data: ",weatherData);
 
+    cityWeather.innerHTML = weatherData.city.name + "'s Weather";
+
     // This is logging the current temp of the specified city
-    console.log("temp:",weatherData.list[0].main.temp);
+    //console.log("temp:",weatherData.list[0].main.temp);
 
     // Looping through the data incrementing by 8 each time to get daily forecast
     for (var i = 2; i < 40; i+=8) {
         var day = new Date(weatherData.list[i].dt_txt);
         day = day.toLocaleDateString();
 
-        console.log("Day ",weatherData.list[i].dt_txt);
-        console.log("Temp ",weatherData.list[i].main.temp);
-        //console.log("Icon ",weatherData.list[i].weather[0].icon);
+        // console.log("Day ",weatherData.list[i].dt_txt);
+        // console.log("Temp ",weatherData.list[i].main.temp);
+        // //console.log("Icon ",weatherData.list[i].weather[0].icon);
 
         // Getting the icon code from data
         var iconCode = weatherData.list[i].weather[0].icon;
@@ -59,15 +69,6 @@ async function getCityWeather(cityName) {
         icons.appendChild(weatherBox);
     }
 
-    // <div class="top">
-    //         <h2 id="city">Chicago</h2>
-    //         <h2 id="date">Chicago</h2>
-    //         <img src="" alt="" id="iconLocation">
-    //     </div>
-    //     <p id="temp">12</p>
-    //     <p id="wind">13</p>
-    //     <p id="humidity">14</p>
-
     function getCurrent() {
         var currentCity = document.getElementById('city');
         var currentDate = document.getElementById('date');
@@ -86,14 +87,35 @@ async function getCityWeather(cityName) {
         var day = new Date(currentDay.dt_txt);
         day = day.toLocaleDateString();
         
-        currentCity.innerHTML = weatherData.city.name;
-        currentDate.innerHTML = "(" + day +")";
+        currentCity.innerHTML = weatherData.city.name + " " + "(" + day +")";
+        //currentDate.innerHTML = "(" + day +")";
         currentIcon.setAttribute('src', iconURL);
         currentTemp.innerHTML = "Temp: " + weatherData.list[0].main.temp + "\u00B0F";
         currentWind.innerHTML = "Wind: " + weatherData.list[0].wind.speed + " MPH";
         currentHum.innerHTML = "Humidity: " + weatherData.list[0].main.humidity + "%";
     }
+
+    
+
+    // Get the value of the search bar and when the the user clicks the submit button the getCityWeather() function will fire
+
+    // Save the value of the last search the user has made so that when they come back the city will still be there for them
     getCurrent();
 }
 
-getCityWeather("Chicago");
+btn1.addEventListener('click', function() {
+    getCityWeather('new york city');
+});
+btn2.addEventListener('click', function() {
+    getCityWeather('los angeles');
+});
+btn3.addEventListener('click', function() {
+    getCityWeather('chicago');
+});
+btn4.addEventListener('click', function() {
+    getCityWeather('portland');
+});
+btn5.addEventListener('click', function() {
+    getCityWeather('Seattle');
+});
+getCityWeather("London");

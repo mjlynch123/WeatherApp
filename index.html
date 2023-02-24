@@ -8,24 +8,37 @@
     <title>Document</title>
 </head>
 <body>
-    <section id="search">
-        <input type="text" id="city">
-    </section>
-    <main>
-        <section id="currentDay">
-            <div class="top">
-                <h2 id="city"></h2>
-                <h2 id="date"></h2>
-                <img src="" alt="" id="iconLocation">
+    <header>
+        <h1 id="cityWeather"></h1>
+    </header>
+    <div class="mainSection">
+        <section id="search">
+            <div class="enter">
+                <input type="text" id="cityName" placeholder="City Name">
+                <button type="submit" id="submit">Submit</button>
             </div>
-            <p id="temp"></p>
-            <p id="wind"></p>
-            <p id="humidity"></p>
+            <button class="btn" id="btn1" value="new york city">New York City</button>
+            <button class="btn" id="btn2" value="los angeles">Los Angeles</button>
+            <button class="btn" id="btn3" value="chicago">Chicago</button>
+            <button class="btn" id="btn4" value="portland">Portland</button>
+            <button class="btn" id="btn5" value="seattle">Seattle</button>
         </section>
-        <div id="icons">
+        <main>
+            <section id="currentDay">
+                <div class="top">
+                    <h2 id="city"></h2>
+                    <h2 id="date"></h2>
+                    <img src="" alt="" id="iconLocation">
+                </div>
+                <p id="temp"></p>
+                <p id="wind"></p>
+                <p id="humidity"></p>
+            </section>
+            <div id="icons">
 
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
