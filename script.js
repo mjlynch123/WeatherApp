@@ -6,6 +6,7 @@ var btn2 = document.getElementById("btn2");
 var btn3 = document.getElementById("btn3");
 var btn4 = document.getElementById("btn4");
 var btn5 = document.getElementById("btn5");
+var btn6 = document.getElementById("btn6");
 
 async function getCityWeather(cityName) {
     document.querySelectorAll("#weatherBox").forEach(box => box.remove());
@@ -20,21 +21,32 @@ async function getCityWeather(cityName) {
     var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=9a79cae9bb4ffc11b3eac88fea11149c`;
     var weatherResponse = await fetch(weatherEndpoint);
     var weatherData = await weatherResponse.json();
-    console.log("Data: ",weatherData);
+    //console.log("Data: ",weatherData);
+
+    var currentTemp = document.getElementById('temp');
+
+    let dailyForecasts = [];
+    let currentDate = '';
+    // Filters the lists and checks if its a new day, if true we will push it to dailyForecasts
+    weatherData.list.filter((forecast) => {
+        var date = forecast.dt_txt.split(' ')[0];
+        if (date !== currentDate) {
+            currentDate = date;
+            console.log(forecast.dt_txt);
+            dailyForecasts.push(forecast);
+        } else {
+            currentTemp.innerHTML = forecast.main.temp;
+        }
+    });
 
     cityWeather.innerHTML = weatherData.city.name + "'s Weather";
 
     // This is logging the current temp of the specified city
     //console.log("temp:",weatherData.list[0].main.temp);
 
-    // Looping through the data incrementing by 8 each time to get daily forecast
-    for (var i = 2; i < 40; i+=8) {
-        var day = new Date(weatherData.list[i].dt_txt);
+    for (var i = 0; i < dailyForecasts.length; i++) {
+        var day = new Date(dailyForecasts[i].dt_txt);
         day = day.toLocaleDateString();
-
-        // console.log("Day ",weatherData.list[i].dt_txt);
-        // console.log("Temp ",weatherData.list[i].main.temp);
-        // //console.log("Icon ",weatherData.list[i].weather[0].icon);
 
         // Getting the icon code from data
         var iconCode = weatherData.list[i].weather[0].icon;
@@ -56,9 +68,9 @@ async function getCityWeather(cityName) {
         icon.setAttribute('src', iconURL);
 
         date.innerHTML = day;
-        temperature.innerHTML = "Temp: " + weatherData.list[i].main.temp + "\u00B0F";
-        wind.innerHTML = "Wind: " + weatherData.list[i].wind.speed + " MPH";
-        hum.innerHTML = "Humidity: " + weatherData.list[i].main.humidity + "%";
+        temperature.innerHTML = "Temp: " + dailyForecasts[i].main.temp + "\u00B0F";
+        wind.innerHTML = "Wind: " + dailyForecasts[i].wind.speed + " MPH";
+        hum.innerHTML = "Humidity: " + dailyForecasts[i].main.humidity + "%";
 
         // Adding items to the weather box
         weatherBox.appendChild(date);
@@ -68,6 +80,7 @@ async function getCityWeather(cityName) {
         weatherBox.appendChild(hum);
         icons.appendChild(weatherBox);
     }
+
 
     function getCurrent() {
         var currentCity = document.getElementById('city');
@@ -90,12 +103,10 @@ async function getCityWeather(cityName) {
         currentCity.innerHTML = weatherData.city.name + " " + "(" + day +")";
         //currentDate.innerHTML = "(" + day +")";
         currentIcon.setAttribute('src', iconURL);
-        currentTemp.innerHTML = "Temp: " + weatherData.list[0].main.temp + "\u00B0F";
-        currentWind.innerHTML = "Wind: " + weatherData.list[0].wind.speed + " MPH";
-        currentHum.innerHTML = "Humidity: " + weatherData.list[0].main.humidity + "%";
+        currentTemp.innerHTML = "Temp: " + dailyForecasts[0].main.temp + "\u00B0F";
+        currentWind.innerHTML = "Wind: " + dailyForecasts[0].wind.speed + " MPH";
+        currentHum.innerHTML = "Humidity: " + dailyForecasts[0].main.humidity + "%";
     }
-
-    
 
     // Get the value of the search bar and when the the user clicks the submit button the getCityWeather() function will fire
 
@@ -103,19 +114,23 @@ async function getCityWeather(cityName) {
     getCurrent();
 }
 
+getCityWeather("London");
+
 btn1.addEventListener('click', function() {
-    getCityWeather('new york city');
+    getCityWeather('New York City');
 });
 btn2.addEventListener('click', function() {
-    getCityWeather('los angeles');
+    getCityWeather('Los Angeles');
 });
 btn3.addEventListener('click', function() {
-    getCityWeather('chicago');
+    getCityWeather('Chicago');
 });
 btn4.addEventListener('click', function() {
-    getCityWeather('portland');
+    getCityWeather('Portland');
 });
 btn5.addEventListener('click', function() {
     getCityWeather('Seattle');
 });
-getCityWeather("London");
+btn6.addEventListener('click', function() {
+    getCityWeather('Miami');
+});
