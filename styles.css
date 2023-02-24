@@ -1,14 +1,45 @@
 body {
-    width: 100vw;
+    max-width: 100vw;
+    display: flex;
+}
+
+#search {
+    border: 1px solid;
+    height: 100%;
+    max-width: 30%;
+    height: 100vh;
+}
+
+main {
+    align-items: right;
+    width: 70%;
+}
+
+#currentDay {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
+    height: 250px;
+    max-width: 100%;
+}
+
+.top {
+    display: flex;
 }
 
 #icons {
     display: flex;
+    width: 100%;
 }
 
 #weatherBox {
     border: 1px solid;
+    padding: 5px;
     margin: 5px;
-    width: 125px;    
-    height: 150px;
+    width: 20%;
 }
+
+#weatherBox h2 {
+    font-size: 18px;
+}
+
