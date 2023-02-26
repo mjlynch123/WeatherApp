@@ -1,6 +1,7 @@
 var icons = document.getElementById('icons');
 var currentWeather = document.getElementById('currentDay');
 var cityWeather = document.getElementById('cityWeather');
+var submit = document.getElementById("submit");
 var btn1 = document.getElementById("btn1");
 var btn2 = document.getElementById("btn2");
 var btn3 = document.getElementById("btn3");
@@ -8,20 +9,22 @@ var btn4 = document.getElementById("btn4");
 var btn5 = document.getElementById("btn5");
 var btn6 = document.getElementById("btn6");
 
+var api_key = config.MY_API_KEY;
+
 async function getCityWeather(cityName) {
     document.querySelectorAll("#weatherBox").forEach(box => box.remove());
 
-    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=putAPIKeyBack
+    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${api_key}`;
     var geocodingResponse = await fetch(apiEndpoint);
     var geocodingData = await geocodingResponse.json();
     var {lat, lon} = geocodingData[0];
-    //console.log("Geocoding Data ",geocodingData);
+    console.log("Geocoding Data ",geocodingData);
 
     // In this one we will make sure to specify that we want the the data to be in imperial units instead of kelvin
-    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=API KEY`;
+    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=${api_key}`;
     var weatherResponse = await fetch(weatherEndpoint);
     var weatherData = await weatherResponse.json();
-    //console.log("Data: ",weatherData);
+    console.log("Data: ",weatherData);
 
     var currentTemp = document.getElementById('temp');
 
@@ -116,6 +119,11 @@ async function getCityWeather(cityName) {
 
 getCityWeather("London");
 
+submit.addEventListener('click', function() {
+    var inputVal = document.getElementById("cityName").value;
+    getCityWeather(inputVal);
+    inputVal = "";
+});
 btn1.addEventListener('click', function() {
     getCityWeather('New York City');
 });
