@@ -11,14 +11,14 @@ var btn6 = document.getElementById("btn6");
 async function getCityWeather(cityName) {
     document.querySelectorAll("#weatherBox").forEach(box => box.remove());
 
-    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=9a79cae9bb4ffc11b3eac88fea11149c`;
+    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=putAPIKeyBack
     var geocodingResponse = await fetch(apiEndpoint);
     var geocodingData = await geocodingResponse.json();
     var {lat, lon} = geocodingData[0];
     //console.log("Geocoding Data ",geocodingData);
 
     // In this one we will make sure to specify that we want the the data to be in imperial units instead of kelvin
-    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=9a79cae9bb4ffc11b3eac88fea11149c`;
+    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=API KEY`;
     var weatherResponse = await fetch(weatherEndpoint);
     var weatherData = await weatherResponse.json();
     //console.log("Data: ",weatherData);
