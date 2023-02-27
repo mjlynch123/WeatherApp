@@ -1,7 +1,14 @@
+// This is for the title element
+var title = document.getElementById("cityTitle");
+
 var icons = document.getElementById('icons');
 var currentWeather = document.getElementById('currentDay');
 var cityWeather = document.getElementById('cityWeather');
+
 var submit = document.getElementById("submit");
+var buttonArea = document.getElementById("buttons");
+
+// Buttons
 var btn1 = document.getElementById("btn1");
 var btn2 = document.getElementById("btn2");
 var btn3 = document.getElementById("btn3");
@@ -11,20 +18,25 @@ var btn6 = document.getElementById("btn6");
 
 var api_key = '9a79cae9bb4ffc11b3eac88fea11149c';
 
-async function getCityWeather(cityName) {
-    document.querySelectorAll("#weatherBox").forEach(box => box.remove());
+var lastSearched = JSON.parse(localStorage.getItem("lastSearched"));
+var savedSearches = JSON.parse(localStorage.getItem("savedSearches")) || [];
 
-    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=` + api_key;
-    var geocodingResponse = await fetch(apiEndpoint);
+// Always returns a promise and can be executed in the background asyncronously while other code executes
+async function getCityWeather(cityName) {
+    document.querySelectorAll("#weatherBox").forEach(box => box.remove()); // Removing boxes everytime function is called. This makes it so boxes aren't being adding to the existing boxes
+
+    // Getting lat and lon from city name
+    var apiEndpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${api_key}`;
+    var geocodingResponse = await fetch(apiEndpoint); // Awaits response from the API. This makes it so there are .then() statements
     var geocodingData = await geocodingResponse.json();
     var {lat, lon} = geocodingData[0];
-    console.log("Geocoding Data ",geocodingData);
+    //console.log("Geocoding Data ",geocodingData);
 
     // In this one we will make sure to specify that we want the the data to be in imperial units instead of kelvin
-    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=` + api_key;
+    var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=${api_key}`;
     var weatherResponse = await fetch(weatherEndpoint);
     var weatherData = await weatherResponse.json();
-    console.log("Data: ",weatherData);
+    //console.log("Data: ",weatherData);
 
     var currentTemp = document.getElementById('temp');
 
@@ -35,21 +47,22 @@ async function getCityWeather(cityName) {
         var date = forecast.dt_txt.split(' ')[0];
         if (date !== currentDate) {
             currentDate = date;
-            console.log(forecast.dt_txt);
+            //console.log(forecast.dt_txt);
             dailyForecasts.push(forecast);
         } else {
             currentTemp.innerHTML = forecast.main.temp;
         }
     });
 
+    title.innerHTML = weatherData.city.name + " | Weather Today News";
     cityWeather.innerHTML = weatherData.city.name + "'s Weather";
 
     // This is logging the current temp of the specified city
     //console.log("temp:",weatherData.list[0].main.temp);
 
     for (var i = 0; i < dailyForecasts.length; i++) {
-        var day = new Date(dailyForecasts[i].dt_txt);
-        day = day.toLocaleDateString();
+        var day = new Date(dailyForecasts[i].dt_txt); // Mon Feb 27 2023 03:00:00 GMT-0600 (Central Standard Time)
+        day = day.toLocaleDateString(); // 2/27/2023
 
         // Getting the icon code from data
         var iconCode = weatherData.list[i].weather[0].icon;
@@ -84,7 +97,7 @@ async function getCityWeather(cityName) {
         icons.appendChild(weatherBox);
     }
 
-
+    // Getting the current days weather
     function getCurrent() {
         var currentCity = document.getElementById('city');
         var currentDate = document.getElementById('date');
@@ -94,6 +107,7 @@ async function getCityWeather(cityName) {
         var currentWind = document.getElementById('wind');
         var currentHum = document.getElementById('humidity');
 
+        // Getting icon from the first list
         var iconCode = weatherData.list[0].weather[0].icon;
 
         // This is the link where the icons are located we just have to add in the code
@@ -117,28 +131,67 @@ async function getCityWeather(cityName) {
     getCurrent();
 }
 
-getCityWeather("London");
+// If the lastSearched localStorage is empty or null then we will default the loading location to chicago else we will load the last searched city
+if (lastSearched === null || lastSearched === "") {
+    getCityWeather("Chicago");
+} else {
+    getCityWeather(lastSearched);
+}
 
-submit.addEventListener('click', function() {
-    var inputVal = document.getElementById("cityName").value;
-    getCityWeather(inputVal);
-    inputVal = "";
-});
-btn1.addEventListener('click', function() {
-    getCityWeather('New York City');
-});
-btn2.addEventListener('click', function() {
-    getCityWeather('Los Angeles');
-});
-btn3.addEventListener('click', function() {
-    getCityWeather('Chicago');
-});
-btn4.addEventListener('click', function() {
-    getCityWeather('Portland');
-});
-btn5.addEventListener('click', function() {
-    getCityWeather('Seattle');
-});
-btn6.addEventListener('click', function() {
-    getCityWeather('Miami');
-});
+// Function for adding the city to the page after user enters a value into the input
+function addCity() {
+    // Reloading the page so that duplicates are removed
+    window.location.reload();
+
+    var inputVal = document.getElementById("cityName");
+    console.log(inputVal.value[0].toUpperCase());
+
+    // Calling getCityWeather function with the value of the text box and passing that as a parameter
+    getCityWeather(inputVal.value);
+
+    // Saving the input to a str that will load the last searched city whenever the page gets reloaded
+    localStorage.setItem("lastSearched", JSON.stringify(inputVal.value));
+
+    // Creating and setting the buttons
+    var cityButton = document.createElement('button');
+    cityButton.setAttribute("class", "btn");
+    cityButton.value = inputVal.value;
+
+    // Setting the first letter of the input value to be capitalized
+    inputVal.value = inputVal.value[0].toUpperCase() + inputVal.value.slice(1);
+    cityButton.textContent = inputVal.value;
+
+    buttonArea.append(cityButton);
+    savedSearches.push(inputVal.value);
+
+    // clearing the textbox
+    inputVal.value = "";
+
+    // This will save the button added to the screen into the localStorage
+    localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
+}
+
+// Getting rid of any duplicate searches that may have been saved to local Storage
+var pastSearch = savedSearches.filter((city, index) => {
+    return savedSearches.indexOf(city) === index;
+}); 
+
+// Loop through the pastSearch array and add the button to the screen 
+for (i = 0; i < pastSearch.length; i++) {
+    var cityButton = document.createElement('button');
+    cityButton.setAttribute("class", "btn");
+    cityButton.textContent = savedSearches[i];
+    cityButton.value = cityButton.textContent;
+
+    cityButton.setAttribute("id", "btn" + i);
+
+    buttonArea.append(cityButton);
+
+    // Finding the button pressed and then getting the value of that button and passing that to the getCityWeather function
+    document.getElementById("btn" + i).addEventListener('click', function(event) {
+        getCityWeather(event.target.value);
+    });
+}
+
+// Once the user clicks the submit button the button will be added to the page
+submit.addEventListener('click', addCity);

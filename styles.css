@@ -59,6 +59,10 @@ input[type="text"] {
     background-color: #6991e3;
 }
 
+#submit:hover {
+    cursor: pointer;
+}
+
 .btn {
     height: 40px;
     width: 100%;
@@ -70,8 +74,8 @@ input[type="text"] {
     background-color: #aeaeae;
 }
 
-#btn1 {
-    margin-top: 10px;
+.btn:hover {
+    cursor: pointer;
 }
 
 main {
