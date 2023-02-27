@@ -97,14 +97,14 @@ main {
 }
 
 #currentDay {
-    background-color: hsla(0, 0%, 68%, .4);
+    background-color: #aeaeae;
     border-radius: 5px;
     padding: 10px;
     margin: 15px;
     height: 250px;
     font-size: 16px;
     max-width: 100%;
-    box-shadow: 0 0 15px #000;
+    box-shadow: 0 0 12px 10px #e6e6e6;
 }
 
 #currentDay p {
