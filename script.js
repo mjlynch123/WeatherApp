@@ -1,6 +1,8 @@
 // This is for the title element
 var title = document.getElementById("cityTitle");
 
+var clear = document.getElementById("clear");
+
 var icons = document.getElementById('icons');
 var currentWeather = document.getElementById('currentDay');
 var cityWeather = document.getElementById('cityWeather');
@@ -172,12 +174,12 @@ function addCity() {
 }
 
 // Getting rid of any duplicate searches that may have been saved to local Storage
-var pastSearch = savedSearches.filter((city, index) => {
+var savedSearches = savedSearches.filter((city, index) => {
     return savedSearches.indexOf(city) === index;
 }); 
 
 // Loop through the pastSearch array and add the button to the screen 
-for (i = 0; i < pastSearch.length; i++) {
+for (i = 0; i < savedSearches.length; i++) {
     var cityButton = document.createElement('button');
     cityButton.setAttribute("class", "btn");
     cityButton.textContent = savedSearches[i];
@@ -195,3 +197,8 @@ for (i = 0; i < pastSearch.length; i++) {
 
 // Once the user clicks the submit button the button will be added to the page
 submit.addEventListener('click', addCity);
+
+clear.addEventListener('click', function() {
+    localStorage.removeItem('savedSearches');
+    window.location.reload();
+});

@@ -9,10 +9,24 @@ header {
     border: 1px solid transparent;
     width: 100vw;
     color: white;
+    display: flex;
+    align-items: center;
+}
+
+#clear {
+    margin-left: 10px;
+    border: none;
+    font-size: 16px;
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+    background-color: #aeaeae;
 }
 
 #cityWeather {
-    text-align: center;
+    position: relative;
+    left: 45%;
+    transform: translateX(-50%);
 }
 
 .mainSection {
