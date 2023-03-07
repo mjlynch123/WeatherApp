@@ -103,7 +103,6 @@ async function getCityWeather(cityName) {
     // Getting the current days weather
     function getCurrent() {
         var currentCity = document.getElementById('city');
-        var currentDate = document.getElementById('date');
         var currentIcon = document.getElementById('iconLocation');
 
         var currentTemp = document.getElementById('temp');
