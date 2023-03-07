@@ -32,7 +32,7 @@ async function getCityWeather(cityName) {
     var geocodingResponse = await fetch(apiEndpoint); // Awaits response from the API. This makes it so there are .then() statements
     var geocodingData = await geocodingResponse.json();
     var {lat, lon} = geocodingData[0];
-    //console.log("Geocoding Data ",geocodingData);
+    console.log("Geocoding Data ",geocodingData);
 
     // In this one we will make sure to specify that we want the the data to be in imperial units instead of kelvin
     var weatherEndpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=hourly&units=imperial&appid=${api_key}`;
@@ -44,6 +44,7 @@ async function getCityWeather(cityName) {
 
     let dailyForecasts = [];
     let currentDate = '';
+    
     // Filters the lists and checks if its a new day, if true we will push it to dailyForecasts
     weatherData.list.filter((forecast) => {
         var date = forecast.dt_txt.split(' ')[0];
@@ -62,7 +63,7 @@ async function getCityWeather(cityName) {
     // This is logging the current temp of the specified city
     //console.log("temp:",weatherData.list[0].main.temp);
 
-    for (var i = 0; i < dailyForecasts.length; i++) {
+    for (var i = 1; i < dailyForecasts.length; i++) {
         var day = new Date(dailyForecasts[i].dt_txt); // Mon Feb 27 2023 03:00:00 GMT-0600 (Central Standard Time)
         day = day.toLocaleDateString(); // 2/27/2023
 
